@@ -1,0 +1,10 @@
+BUGS :
+1. in q2.c while printing the revrse , the first character from the end is showing 
+some garbage value 
+and also there is some space left in printing (but that may be due to the buffer size that i taking
+of 1024 char long )
+
+2. (Dont know)in q1 the no of characters are printed perfectly but the number 
+of lines are not being printed , being printed only 0
+
+3. There exists lot of space between the characters and not all characters are beign read properly.
