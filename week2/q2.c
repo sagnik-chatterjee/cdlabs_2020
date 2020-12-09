@@ -31,27 +31,19 @@ int main(int argc,char **argv){
     char buffer[1024];//the buffer from whcih we will write to fd
     char ignore[1024];//we would read the line but will write to this ignore array 
 
+    char *line=NULL;
+    size_t len=0;
+    ssize_t read;
     buffer[1023]='\n';
-    //to remove the garbage values     
-
-    for(ch= getc(fa);ch!=EOF;ch=getc(fa)){
-        //traverse thorugh the fa and then write to fb
-        if(ch =='#'){
-            //since preprocesseros start with # in their stmt , this will mean 
-            //fscanf(fa,"%*[^\n]");//jumps to the next line 
-            //ref:  https://stackoverflow.com/questions/16107976/skip-a-line-while-reading-a-file-in-c
-            fgets(ignore,sizeof(ignore),fa);
+    while((read =getline(&line,&len,fa))!=-1){
+        if(strstr(line,"#define")!=NULL || strstr(line,"#include")!=NULL){
+        continue;
         }
-        else {
-            strncat(buffer,&ch,1);//store the other characters in buffer 
+        else{
+            fputs(line,fb);
         }
     }
-
-    buffer[1023]='\0'; //to remove the grbae values at the end of the string 
-
-    for(int i=0;i<1024;i++){
-        fputc(buffer[i],fb);
-    }
+      
 
     printf("Contents copied to %s",argv[2]);
     fclose(fa);
