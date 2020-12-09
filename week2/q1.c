@@ -33,15 +33,13 @@ int main(int argc ,char **argv){
     }
 
     //dicard extra whitespace and tabs 
-    do {
-        ch=getc(fd);
-        if(ch!=' '&& ch!='\n' && ch!='\r' && ch !='\t'){
-            putc(ch,fd1);
+    while((ch=getc(fd))!=EOF){
+        if(ch==' '||ch=='\t'){
+            while(ch==' ' || ch=='\t') ch= getc(fd);
+                putc(' ',fd1);
         }
-        else{
-            putc(' ',fd1);
-        }
-    }while(ch!=EOF);
+        putc(ch,fd1);
+    }
     printf("Wrote to the output file.\n");
     fclose(fd);
     fclose(fd1);
