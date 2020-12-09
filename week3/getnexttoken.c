@@ -3,12 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-struct token
-{
-char token_name [100];
-int index;
-unsigned int row,col; //Line numbers.
-char type[100];
+
+struct token{
+	char token_name [100];
+	int index;
+	unsigned int row,col; //Line numbers.
+	char type[100];
 } token;
 
 void print_token(struct token s){
@@ -31,16 +31,16 @@ void removeComments(){
 			putc(ca,fb);
 			while(ca == ' '|| ca=='\t') ca = getc(fa);
 		}
-		if(ca == '/'){
+		if(ca == '/'){//checking for single and mutli line comments 
 			cb = getc(fa);
-			if(cb == '/'){
+			if(cb == '/'){//if another / then it makes a single line commnet 
 				while(ca != '\n') ca = getc(fa);
 				putc(ca,fb);
 			}
-			else if( cb == '*'){
+			else if( cb == '*'){//else start for multine comment 
 				do{
 					while(ca != '*') ca = getc(fa);
-					ca = getc(fa);
+					ca = getc(fa);//traverse till the end till we fiind another closing bracket 
 				}while(ca != '/');
 			}
 			else{
@@ -67,7 +67,8 @@ void removeDirectives(){
 	fb = fopen("q2tempout.txt","w+");
 	ca = getc(fa);
 	while(ca != EOF){
-		if( ca == '#'){
+		if( ca == '#'){//reamoving all directives that are present 
+			//directoves start with #
 			do{
 				ca = getc(fa);
 			}while(ca != '\n');
@@ -81,7 +82,7 @@ void removeDirectives(){
 
 	fa= fopen("q2tempout.txt","r");
 		if(fa == NULL){
-		printf("Cannot open\n");
+		printf("Cannot open temporar file for writing \n");
 		return;
 	}
 	fb = fopen("q2out.txt","w+");
@@ -109,7 +110,7 @@ char key[32][10] = {
       "goto","sizeof","voltile","do","if","static","while"
 };
 
-int isKeyword(char* word){
+int isKeyword(char* word){//check if keyword or not 
 	// printf("%s\n",word );
 	for(int i = 0; i < 32; i++){
 		if(strcmp(key[i], word) == 0) return 1;
@@ -117,7 +118,6 @@ int isKeyword(char* word){
 	return 0;
 }
 
-//Following functions have been copied
 
 bool isDelimiter(char ch)
 {
@@ -167,8 +167,6 @@ bool isInteger(char* str)
     return (true);
 }
 
-
-// Copied Till here
 
 int main(int argc, char const *argv[])
 {
