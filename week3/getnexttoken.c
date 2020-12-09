@@ -1,3 +1,14 @@
+/*
+AUTHOR :SAGNIK CHATTERJEE 
+DATE : DEC 9,2020
+Usage: ./getnexttoken input.txt
+
+where input.txt is the input file 
+
+*/
+
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -19,7 +30,7 @@ void print_token(struct token s){
 void removeComments(){
 	FILE *fa,*fb; int ca,cb;
 
-	fa = fopen("inputg.txt","r");
+	fa = fopen("input.txt","r");
 	if(fa == NULL){
 		printf("Cannot open\n");
 			return;
@@ -67,8 +78,8 @@ void removeDirectives(){
 	fb = fopen("q2tempout.txt","w+");
 	ca = getc(fa);
 	while(ca != EOF){
-		if( ca == '#'){//reamoving all directives that are present 
-			//directoves start with #
+		if( ca == '#'){//removing all directives that are present 
+			//directives start with #
 			do{
 				ca = getc(fa);
 			}while(ca != '\n');
@@ -82,7 +93,7 @@ void removeDirectives(){
 
 	fa= fopen("q2tempout.txt","r");
 		if(fa == NULL){
-		printf("Cannot open temporar file for writing \n");
+		printf("Cannot open temporary file for writing \n");
 		return;
 	}
 	fb = fopen("q2out.txt","w+");
@@ -102,6 +113,7 @@ void removeDirectives(){
 	if (remove("q2tempout.txt") != 0) printf("Error\n");
 }
 
+//keywords 
 char key[32][10] = {
 	"auto","double","int","struct","break","else","long",
       "switch","case","enum","register","typedef","char",

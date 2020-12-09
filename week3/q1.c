@@ -1,6 +1,3 @@
-//usage : ./getnexttoken inputg.txt
-
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -8,10 +5,10 @@
 #include <stdbool.h>
 
 struct token{
-	char token_name [100];
-	int index;
-	unsigned int row,col; //Required for the row numbers and the line numbers 
-	char type[100];
+char token_name [100];
+int index;
+unsigned int row,col; //Line numbers.
+char type[100];
 } token;
 
 void print_token(struct token s){
@@ -64,10 +61,9 @@ void removeDirectives(){
 
 	fa = fopen("q1out.txt","r");
 	if(fa == NULL){
-		printf("Error opening the file for reading\n");
-		exit(0);
+		printf("Cannot open\n");
+		return;
 	}
-
 	fb = fopen("q2tempout.txt","w+");
 	ca = getc(fa);
 	while(ca != EOF){
@@ -84,19 +80,17 @@ void removeDirectives(){
 	fclose(fb);
 
 	fa= fopen("q2tempout.txt","r");
-	if(fa == NULL){
-		printf("Error opening the file for reading.\n");
-		exit(0);
+		if(fa == NULL){
+		printf("Cannot open\n");
+		return;
 	}
-	
 	fb = fopen("q2out.txt","w+");
 	ca = fgetc(fa);
-	
 	while(ca == '\n'){
 			ca = fgetc(fa);
-	}
-
+		}
 	while(ca != EOF){
+
 		putc(ca,fb);
 		ca = fgetc(fa);
 	}
@@ -123,6 +117,7 @@ int isKeyword(char* word){
 	return 0;
 }
 
+//Following functions have been copied
 
 bool isDelimiter(char ch)
 {
@@ -173,6 +168,8 @@ bool isInteger(char* str)
 }
 
 
+// Copied Till here
+
 int main(int argc, char const *argv[])
 {
 	FILE *fa,*fb;
@@ -181,8 +178,8 @@ int main(int argc, char const *argv[])
 
 	fa = fopen("q2out.txt","r");
 	if(fa == NULL){
-		printf("Cannot open file for reading \n");
-		exit(0);
+		printf("Cannot open\n");
+		return 0;
 	}
 	char word[20], num[20];
 	int i = 0;
@@ -200,7 +197,7 @@ int main(int argc, char const *argv[])
 
 		// check string
 		else if(ca == '"'){
-			strcpy(s.token_name,"String Literal");
+			strcpy(s.token_name,"string literal");
 			s.row=row;
 			s.col=col;
 			print_token(s);
