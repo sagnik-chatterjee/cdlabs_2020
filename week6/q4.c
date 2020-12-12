@@ -1,61 +1,58 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 int curr=0;
 char str[100];
-void S();
-void T();
-void TPrime();
+
 
 void invalid() {
-	printf("------ ERROR-------\n");
-	exit(1);
-}
-
-void valid() {
-	printf("--------SUCCESS------\n");
+	printf("------ERROR-----\n");
 	exit(0);
 }
 
-void S() {
-	if(str[curr]=='a'){
+void valid() {
+	printf("------SUCCESS-----\n");
+	exit(0);
+}
+void S();
+void L();
+void LPrime();
+
+void S(){
+	if(str[curr]=='('){
 		curr++;
-		return;
-	}
-	else if(str[curr]='>'){
-		curr++;
-		return;
-	}
-	else if(str[curr]=='('){
-		curr++;	
-		T();	
+		L();
 		if(str[curr]==')'){
 			curr++;
 			return ;
 		}
 		invalid();
 	}
-	else
-	{
+	else if(str[curr]=='a'){
+		curr++;
+		return ;
+	}
+	else {
 		invalid();
 	}
 }
-
-void T() {
+void L(){
 	S();
-	TPrime();
+	LPrime();
 }
 
-void TPrime(){
+void LPrime(){
 	if(str[curr]==','){
 		curr++;
-		S(); 
+		S();
+		LPrime();
+		return ;
 	}
 }
 
 
-int main() {
+int main(){
 	printf("Enter string \n");
 	scanf("%s",str);
 	S();

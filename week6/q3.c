@@ -1,11 +1,4 @@
-/*
-After removing left recursion
-S: a A c B e
-A: b C
-C: b C
-B: d
 
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,6 +6,11 @@ B: d
 
 int curr = 0;
 char str[100];
+
+void S();
+void A();
+void APrime();
+void B();
 
 void valid() {
 	printf("------VALID-----\n");
@@ -24,6 +22,7 @@ void invalid() {
 	exit(0);
 }
 
+
 void S() {
 	if (str[curr] == 'a') {
 		curr++;
@@ -32,42 +31,50 @@ void S() {
 			curr++;
 			B();
 			if (str[curr] == 'e') {
-				valid();
+				curr++;
+				return ;
 			}
+			else{
 			invalid();
-		} invalid();
-	} invalid();
+		}
+	  }
+	  else{
+	  	invalid();	
+	  }
+	} 
+
+	else {
+	 	invalid();
+	}
+}
+
+void APrime(){
+	if(str[curr]=='b'){
+		curr++;
+		APrime();
+		return ;
+	}
 }
 
 void A() {
 	if (str[curr] == 'b') {
-		C();
-
+		curr++;
+		APrime();
 	}
-
-}
-
-void C() {
-	if (str[curr] == 'b') {
-		C();
-	}
-}
-
-
-void B() {
-	if (str[curr] == 'b') {
-		valid();
-
-	}
-	else {
+	else{
 		invalid();
 	}
 }
 
-
+void B(){
+	if(str[curr]=='d'){
+		curr++;
+		return ;
+	}
+}
 int main() {
 	printf("Enter the string \n");
-	scanf("%s", &str);
+	scanf("%s", str);
 	S();
 	if (str[curr] == '$')
 		valid();

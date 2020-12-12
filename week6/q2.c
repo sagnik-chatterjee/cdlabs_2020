@@ -5,6 +5,11 @@
 int curr = 0;
 char str[100];
 
+void S();
+void U();
+void V();
+void W();
+
 void invalid() {
 	printf("------ERROR-----\n");
 	exit(0);
@@ -29,27 +34,45 @@ void U() {
 			curr++;
 			return ;
 		}
+		else{
+			invalid();
+		}
 	}
 	else if (str[curr] == 'a') {
+		curr++;
 		S();
-		str[curr++] = 'b';
+		if(str[curr++] = 'b'){
+			curr++;
+			return ;
+		}
+		else{
+			invalid();
+		}
 	}
+	
+	else if(str[curr++] = 'd'){
+			curr++;
+			return ;
+		}
 	else {
-		str[curr++] = 'd';
+		invalid();
 	}
 }
 
-
 void V() {
 	if (str[curr] == 'a') {
+		curr++;
 		V();
+		return ;
 	}
 }
 
 
 void W() {
 	if (str[curr] == 'c') {
+		curr++;
 		W();
+		return ;
 	}
 }
 
@@ -60,7 +83,6 @@ int main() {
 	if (str[curr] == '$')
 		valid();
 	else {
-		printf("%c\n", str[curr]);
 		invalid();
 	}
 }
