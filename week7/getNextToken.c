@@ -1,25 +1,12 @@
-/*
-AUTHOR : SAGNIK CHATTERJEE 
-DATE  :11 DEC,2020 
-USAGE : ./q1 sampleIn.c
-
-
-*/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
-const char *keywords[] = {
-"auto","double","int","struct",
-"break","else","long","switch","case",
-"enum","register","typedef","char","extern",
-"return","union","continue",
-"for","signed","void","do",
-"if","static","while","default","goto",
-"sizeof","volatile","const","float","short",
+const char *keywords[] = {"auto","double","int","struct",
+"break","else","long","switch","case","enum","register","typedef","char","extern",
+"return","union","continue","for","signed","void","do",
+"if","static","while","default","goto","sizeof","volatile","const","float","short",
 "unsigned","printf","scanf","true","false"
 };
 
@@ -132,13 +119,11 @@ struct token getNextToken(FILE *fa){
 	int gotToken=0;
 	while(!gotToken && (c=fgetc(fa))!=EOF)
 	{
-		if(charIs(c,specialsymbols))
-		{
+		if(charIs(c,specialsymbols)){
 			fillToken(&tkn,c,row,col);
 			gotToken=1;
 			++col;
-		}
-		else if(charIs(c,arithmeticsymbols))
+		}else if(charIs(c,arithmeticsymbols))
 		{
 			fseek(fa,-1,SEEK_CUR);
 			c=getc(fa);
@@ -148,99 +133,78 @@ struct token getNextToken(FILE *fa){
 			++col;
 			}
 			fseek(fa,1,SEEK_CUR);
-		}
-		else if(c=='(')
+		}else if(c=='(')
+		{
+			fillToken(&tkn,c,row,col);
+			gotToken=1;
+			col++;
+		}else if(c==')')
+		{
+			fillToken(&tkn,c,row,col);
+			gotToken=1;
+			col++;
+		}else if(c=='{')
+		{
+			fillToken(&tkn,c,row,col);
+			gotToken=1;
+			col++;
+		}else if(c=='}')
+		{
+			fillToken(&tkn,c,row,col);
+			gotToken=1;
+			col++;
+		}else if(c=='[')
 		{
 			fillToken(&tkn,c,row,col);
 			gotToken=1;
 			col++;
 		}
-		else if(c==')')
-		{
+		else if(c==']'){
 			fillToken(&tkn,c,row,col);
 			gotToken=1;
 			col++;
-		}
-		else if(c=='{')
-		{
-			fillToken(&tkn,c,row,col);
-			gotToken=1;
-			col++;
-		}
-		else if(c=='}')
-		{
-			fillToken(&tkn,c,row,col);
-			gotToken=1;
-			col++;
-		}
-		else if(c=='[')
-		{
-			fillToken(&tkn,c,row,col);
-			gotToken=1;
-			col++;
-		}
-		else if(c==']')
-		{
-			fillToken(&tkn,c,row,col);
-			gotToken=1;
-			col++;
-		}
-		else if(c=='+')
+		}else if(c=='+')
 		{
 			int x=fgetc(fa);
-			if(x!='+')
-			{
+			if(x!='+'){
 				fillToken(&tkn,c,row,col);
 				gotToken=1;
 				col++;
 				fseek(fa,-1,SEEK_CUR);
-			}
-			else
-			{
+			}else{
 				fillToken(&tkn,c,row,col);
 				strcpy(tkn.lexeme,"++");
 				gotToken=1;
 				col+=2;
 			}
-		}
-		else if(c=='-')
+		}else if(c=='-')
 		{
 			int x=fgetc(fa);
-			if(x!='-')
-			{
+			if(x!='-'){
 				fillToken(&tkn,c,row,col);
 				gotToken=1;
 				col++;
 				fseek(fa,-1,SEEK_CUR);
-			}
-			else
-			{
+			}else{
 				fillToken(&tkn,c,row,col);
 				strcpy(tkn.lexeme,"++");
 				gotToken=1;
 				col+=2;
 			}
-		}
-		else if(c=='=')
-		{
+		}else if(c=='='){
 			int x=fgetc(fa);
-			if(x!='=')
-			{
+			if(x!='='){
 				fillToken(&tkn,c,row,col);
 				gotToken=1;
 				col++;
 				fseek(fa,-1,SEEK_CUR);
-			}
-			else
-			{
+			}else{
 				fillToken(&tkn,c,row,col);
 				strcpy(tkn.lexeme,"++");
 				gotToken=1;
 				col+=2;
 			}
-		}
-		else if(isdigit(c))
-		{
+		}else if(isdigit(c)){
 			fillToken(&tkn,c,row,col++);
 			int j=1;
 			while((c=fgetc(fa))!=EOF && isdigit(c))
@@ -251,59 +215,47 @@ struct token getNextToken(FILE *fa){
 			tkn.lexeme[j]='\0';
 			gotToken=1;
 			fseek(fa,-1,SEEK_CUR);
-		}
-		else if(c == '#') 
-		{
+		}else if(c == '#'){
 			while((c = fgetc(fa))!= EOF && c != '\n');
 			newLine();
-	    }
-	    else if(c=='\n')
+	    }else if(c=='\n')
 		{
 			newLine();
 			c = fgetc(fa);
-			if(c == '#') 
-			{
+			if(c == '#'){
 				while((c = fgetc(fa)) != EOF && c != '\n');
 				newLine();
 			}
-			else if(c != EOF) 
-			{
+			else if(c != EOF){
 				fseek(fa, -1, SEEK_CUR);
 			}
-		}
-		else if(isspace(c))
+		}else if(isspace(c))
 		{
 		   	++col;
-		}
-		else if(isalpha(c) || c=='_')
+		}else if(isalpha(c) || c=='_')
 		{
 			tkn.row=row;
 			tkn.col=col++;
 			tkn.lexeme[0]=c;
 			int j=1;
-			while((c=fgetc(fa))!=EOF && isalnum(c))
-			{
+			while((c=fgetc(fa))!=EOF && isalnum(c)){
 				tkn.lexeme[j++]=c;
 				col++;
 			}
 			tkn.lexeme[j]='\0';
-			if(isKeyword(tkn.lexeme))
-			{
+			if(isKeyword(tkn.lexeme)){
 				strcpy(tkn.type,"KEYWORD");
 			}
-			else
-			{
+			else{
 				strcpy(tkn.type,"IDENTIFIER");
 			}
 			gotToken=1;
 			fseek(fa,-1,SEEK_CUR);
-		}
-		else if(c=='/')
+		}else if(c=='/')
 		{
 			int d=fgetc(fa);
 			++col;
-			if(d=='/')
-			{
+			if(d=='/'){
 			   	while((c=fgetc(fa))!= EOF && c!='\n')
 			   	{
 			   	  	++col;
@@ -375,11 +327,9 @@ struct token getNextToken(FILE *fa){
 			}
 			gotToken = 1;
 		} 
-		else if(c == '&' || c == '|') 
-		{
+		else if(c == '&' || c == '|'){
 			int d = fgetc(fa);
-			if(c == d) 
-			{
+			if(c == d){
 					tkn.lexeme[0] = tkn.lexeme[1] = c;
 					tkn.lexeme[2] = '\0';
 					tkn.row = row;
@@ -388,19 +338,75 @@ struct token getNextToken(FILE *fa){
 					gotToken = 1;
 					strcpy(tkn.type, "LOGICALOPERATOR");
 			} 
-			else 
-			{
+			else{
 				fseek(fa, -1, SEEK_CUR);
 			}
 			++col;
 		}
-		else
-		{
+		else{
 			++col;
 		} 
 	}
 	return tkn;
 }
+
+
+void removeComments(FILE* fa,FILE*  fb){
+	int ca ,cb;
+	ca = getc(fa);
+	while (ca != EOF){
+		if(ca==' '){
+			putc(ca,fb);
+			while(ca==' ')
+				ca = getc(fa);
+		}if (ca=='/'){
+			cb = getc(fa);
+			if (cb == '/'){
+				while(ca != '\n')
+					ca = getc(fa);
+			}else if (cb == '*'){
+				do{
+					while(ca != '*')
+						ca = getc(fa);
+					ca = getc(fa);
+				} while (ca != '/');
+			}else{
+				putc(ca,fb);
+				putc(cb,fb);
+			}
+		}else putc(ca,fb);
+		ca = getc(fa);
+	}
+	fclose(fa);
+	fclose(fb);
+
+}
+
+void removeHeaders(FILE *fa,FILE *fb){
+    int ca,cb;
+	ca = getc(fa);
+	while (ca != EOF){
+        if(ca=='"'){
+            putc(ca,fb);
+            ca=getc(fa);
+            while(ca!='"'){
+                putc(ca,fb);
+                ca=getc(fa);
+            }
+        }
+        else if(ca=='#'){
+            while(ca!='\n'){
+                ca=getc(fa);
+            }
+            ca=getc(fa);
+        }
+    putc(ca,fb);
+    ca = getc(fa);
+    }
+	fclose(fa);
+	fclose(fb);
+}
+
 int main()
 {
 	FILE *fa, *fb;
@@ -417,41 +423,8 @@ int main()
         exit(0);
     }
     
-    ca = getc(fa);
-	while (ca != EOF){
-		if(ca==' ')
-		{
-			putc(ca,fb);
-			while(ca==' ')
-				ca = getc(fa);
-		}
-		if (ca=='/')
-		{
-			cb = getc(fa);
-			if (cb == '/')
-			{
-				while(ca != '\n')
-					ca = getc(fa);
-			}
-			else if (cb == '*')
-			{
-				do
-				{
-					while(ca != '*')
-						ca = getc(fa);
-					ca = getc(fa);
-				} while (ca != '/');
-			}
-			else{
-				putc(ca,fb);
-				putc(cb,fb);
-			}
-		}
-		else putc(ca,fb);
-		ca = getc(fa);
-	}
-	fclose(fa);
-	fclose(fb);
+    removeComments(fa,fb);
+    
 	fa = fopen("sampleout.c", "r");
 	if(fa == NULL){
 		printf("[ERROR] Cannot open file");
@@ -463,46 +436,6 @@ int main()
         printf("[ERROR] Cannot open file for writing. \n");
         exit(0);
     }
-    
-	ca = getc(fa);
-	while (ca != EOF)
-    {
-        if(ca=='"')
-        {
-            putc(ca,fb);
-            ca=getc(fa);
-            while(ca!='"')
-            {
-                putc(ca,fb);
-                ca=getc(fa);
-            }
-        }
-        else if(ca=='#')
-        {
-
-            while(ca!='\n')
-            {
-
-                ca=getc(fa);
-
-            }
-            ca=getc(fa);
-        }
-    putc(ca,fb);
-    ca = getc(fa);
-    }
-	fclose(fa);
-	fclose(fb);
-	
-	fa = fopen("temp.c", "r");
-	fb = fopen("sampleout.c", "w");
-	ca = getc(fa);
-	while(ca != EOF){
-		putc(ca, fb);
-		ca = getc(fa);
-	}
-	fclose(fa);
-	fclose(fb);
 	remove("temp.c");
 	FILE *f1=fopen("sampleout.c","r");
 	if(f1==NULL){
