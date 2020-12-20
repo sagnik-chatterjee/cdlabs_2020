@@ -55,10 +55,10 @@ struct sttable{
 	char type[64];
 	int size;
 };
-int findTable(struct sttable *tab,char *nam,int n){
+int findTable(struct sttable *tab,char *name,int n){
 	int i=0;
 	for(i=0;i<n;i++){
-		if(strcmp(tab[i].lexeme,nam)==0){
+		if(strcmp(tab[i].lexeme,name)==0){
 			return 1;
 		}
 	}
@@ -75,7 +75,7 @@ struct sttable fillTable(int sno,char *lexn,char *dt,char *t,int s){
 }
 void printTable(struct sttable *tab,int n){
 	for(int i=0;i<n;i++){
-		printf("%d %s  %d\n",tab[i].sno,tab[i].lexeme,tab[i].size);
+		printf("| %d | %s | %d |\n",tab[i].sno,tab[i].lexeme,tab[i].size);
 	}
 }
 static int row=1,col=1;
@@ -216,7 +216,7 @@ struct token getNextToken(FILE *fa){
 			else
 			{
 				fillToken(&tkn,c,row,col);
-				strcpy(tkn.lexeme,"++");
+				strcpy(tkn.lexeme,"--");
 				gotToken=1;
 				col+=2;
 			}
@@ -234,7 +234,7 @@ struct token getNextToken(FILE *fa){
 			else
 			{
 				fillToken(&tkn,c,row,col);
-				strcpy(tkn.lexeme,"++");
+				strcpy(tkn.lexeme,"==");
 				gotToken=1;
 				col+=2;
 			}
