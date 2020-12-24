@@ -1,117 +1,197 @@
-/*
-AUTHOR : SAGNIK CHATTERJEE
-DATE  :11 DEC,2020
-USAGE : ./q1 sampleIn.c
-
-
-*/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-
 const char *keywords[] = {
-	"auto", "double", "int", "struct",
-	"break", "else", "long", "switch", "case",
-	"enum", "register", "typedef", "char", "extern",
-	"return", "union", "continue",
-	"for", "signed", "void", "do",
-	"if", "static", "while", "default", "goto",
-	"sizeof", "volatile", "const", "float", "short",
-	"unsigned", "printf", "scanf", "true", "false"
-};
 
-const char *datatypes[] = {"int", "char", "void", "float", "bool"};
-int isdatatype(char *word) {
-	//to check if its datatype or not
+	"auto",
+
+	"double",
+
+	"int",
+
+	"struct",
+
+	"break",
+
+	"else",
+
+	"long",
+
+	"switch",
+
+	"case",
+
+	"enum",
+
+	"register",
+
+	"typedef",
+
+	"char",
+
+	"extern",
+
+	"return",
+
+	"union",
+
+	"continue",
+
+	"for",
+
+	"signed",
+
+	"void",
+
+	"do",
+
+	"if",
+
+	"static",
+
+	"while",
+
+	"default",
+
+	"goto",
+
+	"sizeof",
+
+	"volatile",
+
+	"const",
+
+	"float",
+
+	"short",
+
+	"unsigned",
+
+	"printf",
+
+	"scanf",
+	"true", "false"
+
+};
+const char *datypes[] = {"int", "char", "void", "float", "bool"};
+int isdtype(char *w)
+{
 	int i;
-	for (i = 0; i < sizeof(datatypes) / sizeof(char*); i++) {
-		if (strcmp(word, datatypes[i]) == 0) {
+	for (i = 0; i < sizeof(datypes) / sizeof(char*); i++)
+	{
+		if (strcmp(w, datypes[i]) == 0)
+		{
 			return 1;
 		}
 	}
 	return 0;
 }
-int isKeyword(char *word) {
+int isKeyword(char *w)
+{
+
 	int i;
-	for (i = 0; i < sizeof(keywords) / sizeof(char*); i++) {
-		if (strcmp(word, keywords[i]) == 0) {
+
+	for (i = 0; i < sizeof(keywords) / sizeof(char*); i++)
+
+	{
+
+		if (strcmp(w, keywords[i]) == 0)
+
+		{
+
 			return 1;
+
 		}
+
 	}
+
 	return 0;
 }
-struct token {
+struct token
+{
 	char lexeme[128];
 	unsigned int row, col;
 	char type[64];
 };
-struct sttable {
+struct sttable
+{
 	int sno;
 	char lexeme[128];
 	char dtype[64];
 	char type[64];
 	int size;
 };
-int findTable(struct sttable *tab, char *name, int n) {
+int findTable(struct sttable *tab, char *nam, int n)
+{
 	int i = 0;
-	for (i = 0; i < n; i++) {
-		if (strcmp(tab[i].lexeme, name) == 0) {
+	for (i = 0; i < n; i++)
+	{
+		if (strcmp(tab[i].lexeme, nam) == 0)
+		{
 			return 1;
 		}
 	}
 	return 0;
 }
-struct sttable fillTable(int sno, char *lexn, char *dt, char *t, int s) {
+struct sttable fillTable(int sno, char *lexn, char *dt, char *t, int s)
+{
 	struct sttable tab;
 	tab.sno = sno;
 	strcpy(tab.lexeme, lexn);
 	strcpy(tab.dtype, dt);
-	//strcpy(tab.type,t);
+	strcpy(tab.type, t);
 	tab.size = s;
 	return tab;
 }
-void printTable(struct sttable *tab, int n) {
-	for (int i = 0; i < n; i++) {
-		printf("| %d | %s | %d |\n", tab[i].sno, tab[i].lexeme, tab[i].size);
+void printTable(struct sttable *tab, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%d %s %s %s %d\n", tab[i].sno, tab[i].lexeme, tab[i].dtype, tab[i].type, tab[i].size);
 	}
 }
 static int row = 1, col = 1;
 char buf[2048];
 char dbuf[128];
 int ind = 0;
-
 const char specialsymbols[] = {'?', ';', ':', ','};
 const char arithmeticsymbols[] = {'*'};
-int charIs(int c, const char *arr) {
+int charIs(int c, const char *arr)
+{
 	int len;
-	if (arr == specialsymbols) {
+	if (arr == specialsymbols)
+	{
 		len = sizeof(specialsymbols) / sizeof(char);
 	}
-	else if (arr == arithmeticsymbols) {
+	else if (arr == arithmeticsymbols)
+	{
 		len = sizeof(arithmeticsymbols) / sizeof(char);
 	}
-	for (int i = 0; i < len; i++) {
-		if (c == arr[i]) {
+	for (int i = 0; i < len; i++)
+	{
+		if (c == arr[i])
+		{
 			return 1;
 		}
 	}
 	return 0;
 }
-void fillToken(struct token *tkn, char c, int row, int col) {
+void fillToken(struct token *tkn, char c, int row, int col, char *type)
+{
 	tkn->row = row;
 	tkn->col = col;
-	//strcpy(tkn->type,type);
+	strcpy(tkn->type, type);
 	tkn->lexeme[0] = c;
 	tkn->lexeme[1] = '\0';
 }
-void newLine() {
+void newLine()
+{
 	++row;
 	col = 1;
 }
-int sz(char *w) {
+int sz(char *w)
+{
 	if (strcmp(w, "int") == 0)
 		return 4;
 	if (strcmp(w, "char") == 0)
@@ -123,7 +203,8 @@ int sz(char *w) {
 	if (strcmp(w, "bool") == 0)
 		return 1;
 }
-struct token getNextToken(FILE *fa) {
+struct token getNextToken(FILE *fa)
+{
 	int c;
 	struct token tkn =
 	{
@@ -134,7 +215,7 @@ struct token getNextToken(FILE *fa) {
 	{
 		if (charIs(c, specialsymbols))
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "SS");
 			gotToken = 1;
 			++col;
 		}
@@ -143,7 +224,7 @@ struct token getNextToken(FILE *fa) {
 			fseek(fa, -1, SEEK_CUR);
 			c = getc(fa);
 			if (isalnum(c)) {
-				fillToken(&tkn, c, row, col);
+				fillToken(&tkn, c, row, col, "ARITHMETICOPERATOR");
 				gotToken = 1;
 				++col;
 			}
@@ -151,37 +232,37 @@ struct token getNextToken(FILE *fa) {
 		}
 		else if (c == '(')
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "LB");
 			gotToken = 1;
 			col++;
 		}
 		else if (c == ')')
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "RB");
 			gotToken = 1;
 			col++;
 		}
 		else if (c == '{')
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "LC");
 			gotToken = 1;
 			col++;
 		}
 		else if (c == '}')
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "RC");
 			gotToken = 1;
 			col++;
 		}
 		else if (c == '[')
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "LS");
 			gotToken = 1;
 			col++;
 		}
 		else if (c == ']')
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "RS");
 			gotToken = 1;
 			col++;
 		}
@@ -190,14 +271,14 @@ struct token getNextToken(FILE *fa) {
 			int x = fgetc(fa);
 			if (x != '+')
 			{
-				fillToken(&tkn, c, row, col);
+				fillToken(&tkn, c, row, col, "ARITHMETICOPERATOR");
 				gotToken = 1;
 				col++;
 				fseek(fa, -1, SEEK_CUR);
 			}
 			else
 			{
-				fillToken(&tkn, c, row, col);
+				fillToken(&tkn, c, row, col, "UNARYOPERATOR");
 				strcpy(tkn.lexeme, "++");
 				gotToken = 1;
 				col += 2;
@@ -208,15 +289,15 @@ struct token getNextToken(FILE *fa) {
 			int x = fgetc(fa);
 			if (x != '-')
 			{
-				fillToken(&tkn, c, row, col);
+				fillToken(&tkn, c, row, col, "ARITHMETICOPERATOR");
 				gotToken = 1;
 				col++;
 				fseek(fa, -1, SEEK_CUR);
 			}
 			else
 			{
-				fillToken(&tkn, c, row, col);
-				strcpy(tkn.lexeme, "--");
+				fillToken(&tkn, c, row, col, "UNARYOPERATOR");
+				strcpy(tkn.lexeme, "++");
 				gotToken = 1;
 				col += 2;
 			}
@@ -226,22 +307,22 @@ struct token getNextToken(FILE *fa) {
 			int x = fgetc(fa);
 			if (x != '=')
 			{
-				fillToken(&tkn, c, row, col);
+				fillToken(&tkn, c, row, col, "ASSIGNMENTOPERATOR");
 				gotToken = 1;
 				col++;
 				fseek(fa, -1, SEEK_CUR);
 			}
 			else
 			{
-				fillToken(&tkn, c, row, col);
-				strcpy(tkn.lexeme, "==");
+				fillToken(&tkn, c, row, col, "RELATIONALOPERATOR");
+				strcpy(tkn.lexeme, "++");
 				gotToken = 1;
 				col += 2;
 			}
 		}
 		else if (isdigit(c))
 		{
-			fillToken(&tkn, c, row, col++);
+			fillToken(&tkn, c, row, col++, "NUMBER");
 			int j = 1;
 			while ((c = fgetc(fa)) != EOF && isdigit(c))
 			{
@@ -263,7 +344,7 @@ struct token getNextToken(FILE *fa) {
 			c = fgetc(fa);
 			if (c == '#')
 			{
-				while ((c = fgetc(fa)) != EOF && c != '\n'); 1
+				while ((c = fgetc(fa)) != EOF && c != '\n');
 				newLine();
 			}
 			else if (c != EOF)
@@ -335,7 +416,7 @@ struct token getNextToken(FILE *fa) {
 			}
 			else
 			{
-				fillToken(&tkn, c, row, --col);
+				fillToken(&tkn, c, row, --col, "ARITHMETIC OPERATOR");
 				gotToken = 1;
 				fseek(fa, -1, SEEK_CUR);
 			}
@@ -357,7 +438,7 @@ struct token getNextToken(FILE *fa) {
 		}
 		else if (c == '<' || c == '>' || c == '!')
 		{
-			fillToken(&tkn, c, row, col);
+			fillToken(&tkn, c, row, col, "RELATIONALOPERATOR");
 			++col;
 			int d = fgetc(fa);
 			if (d == '=')
@@ -401,22 +482,16 @@ struct token getNextToken(FILE *fa) {
 	}
 	return tkn;
 }
-int main()
+int getST(FILE *fa)
 {
-	FILE *fa, *fb;
+	FILE*fb;
 	int ca, cb;
-	fa = fopen("sampleIn.c", "r");
 	if (fa == NULL) {
-		printf("[ERROR] Cannot open file for reading . \n");
+		printf("Cannot open file \n");
 		exit(0);
 	}
 
-	fb = fopen("sampleout.c", "w+");
-	if (fb == NULL) {
-		printf("[ERROR] Cannot open file for writing. \n");
-		exit(0);
-	}
-
+	fb = fopen("out4.c", "w+");
 	ca = getc(fa);
 	while (ca != EOF) {
 		if (ca == ' ')
@@ -452,18 +527,12 @@ int main()
 	}
 	fclose(fa);
 	fclose(fb);
-	fa = fopen("sampleout.c", "r");
+	fa = fopen("out4.c", "r");
 	if (fa == NULL) {
-		printf("[ERROR] Cannot open file");
+		printf("Cannot open file");
 		return 0;
 	}
-
 	fb = fopen("temp.c", "w+");
-	if (fb == NULL) {
-		printf("[ERROR] Cannot open file for writing. \n");
-		exit(0);
-	}
-
 	ca = getc(fa);
 	while (ca != EOF)
 	{
@@ -495,7 +564,7 @@ int main()
 	fclose(fb);
 
 	fa = fopen("temp.c", "r");
-	fb = fopen("sampleout.c", "w");
+	fb = fopen("out4.c", "w");
 	ca = getc(fa);
 	while (ca != EOF) {
 		putc(ca, fb);
@@ -504,9 +573,10 @@ int main()
 	fclose(fa);
 	fclose(fb);
 	remove("temp.c");
-	FILE *f1 = fopen("sampleout.c", "r");
-	if (f1 == NULL) {
-		printf("[ERROR] File cannot be opened!\n");
+	FILE *f1 = fopen("out4.c", "r");
+	if (f1 == NULL)
+	{
+		printf("Error! File cannot be opened!\n");
 		return 0;
 	}
 	struct token tkn;
@@ -517,10 +587,10 @@ int main()
 	w[0] = '\0';
 	while ((tkn = getNextToken(f1)).row != -1)
 	{
-		printf("<%s, %d, %d>\n", tkn.lexeme, tkn.row, tkn.col);
+		printf("<%s, %d, %d, %s>\n", tkn.lexeme, tkn.row, tkn.col, tkn.type);
 		if (strcmp(tkn.type, "KEYWORD") == 0)
 		{
-			if (isdatatype(tkn.lexeme) == 1)
+			if (isdtype(tkn.lexeme) == 1)
 			{
 				strcpy(dbuf, tkn.lexeme);
 			}
@@ -529,7 +599,7 @@ int main()
 		{
 			strcpy(w, tkn.lexeme);
 			tkn = getNextToken(f1);
-			printf("<%s, %d, %d>\n", tkn.lexeme, tkn.row, tkn.col);
+			printf("<%s, %d, %d, %s>\n", tkn.lexeme, tkn.row, tkn.col, tkn.type);
 			if ((strcmp(tkn.type, "LB")) == 0)
 			{
 				if (findTable(st[i], w, j) == 0)
@@ -543,7 +613,7 @@ int main()
 				if (findTable(st[i], w, j) == 0)
 				{
 					tkn = getNextToken(f1);
-					printf("<%s, %d, %d>\n", tkn.lexeme, tkn.row, tkn.col);
+					printf("<%s, %d, %d, %s>\n", tkn.lexeme, tkn.row, tkn.col, tkn.type);
 					int s = 0;
 					if (strcmp(tkn.type, "NUMBER") == 0)
 					{
@@ -558,7 +628,8 @@ int main()
 				if (findTable(st[i], w, j) == 0)
 				{
 					ind++;
-					st[i][j++] = fillTable(ind, w, dbuf, "id", sz(dbuf));
+					st[i][j
+					      ++] = fillTable(ind, w, dbuf, "id", sz(dbuf));
 				}
 			}
 		}
@@ -580,9 +651,10 @@ int main()
 	}
 	int k = 0;
 	for (k = 0; k < i; k++)
-	{
+	{	printf("FUNCTION %d\n", k + 1 );
+
 		printTable(st[k], tabsz[k]);
-		printf("********-------*********------********\n\n");
+		printf("\n\n");
 	}
 	fclose(f1);
 

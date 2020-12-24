@@ -324,12 +324,12 @@ struct token getNextToken(FILE *f1)
     }
     return tkn;
 }
-int main()
+int main(int argc ,char **argv)
 {
-    char fname[100];
-    printf("Enter file name:");
-    scanf("%s",fname);
-    FILE *f1=fopen(fname,"r");
+   // char fname[100];
+  //  printf("Enter file name:");
+   // scanf("%s",fname);
+    FILE *f1=fopen(argv[1],"r");
     if(f1==NULL)
       {
           printf("Error! File cannot be opened!\n");
